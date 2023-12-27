@@ -1,50 +1,43 @@
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { AuthContext } from "../Hooks/AuthProvider";
+import useAxiosPublic from "../Hooks2/useAxiosPublic";
 
 
 const AddTask = () => {
+    const { user } = useContext(AuthContext);
     const { register, handleSubmit, reset } = useForm();
+    const axiosPublic = useAxiosPublic();
+   
     const onSubmit = async (data) => {
         console.log(data)
        
         
             const newProduct = {
+                email: user?.email,
                 title: data.title,
                 description: data.description,
                 deadline:data.deadline,
-                priority:data.priority
+                priority:data.priority,
+                status: "todo"
                 
             }
-           
-            fetch('http://localhost:5000/addTask',{
-                        method:'POST',
-                        headers:{
-                         'content-type': 'application/json'
-                        },
-                        body:JSON.stringify(newProduct)
-                     })
-            
-            if(data.insertedId){
-               
-                // show success popup
-                reset();
-                
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: `${data.name} is added to the menu.`,
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-            }
-        
-    }
-     
-      
-        
-
-
-    // }
+          
+            axiosPublic.post("/addTask", newProduct).then((res) => {
+                console.log(res.data);
+                if (res.data.insertedId) {
+                    Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "task added",
+                                showConfirmButton: false,
+                                timer: 1500
+                              });
+                  reset();
+                }
+              });
+            };
     return (
         <div className="bg-[#F4F3F0] lg:p-24">
             <h2 className="lg:text-3xl text-xl font-extrabold">Add Task</h2>

@@ -17,6 +17,17 @@ const Dashboard = () => {
                  
                   Add Task</NavLink>
               </li>
+             <br />
+              <li>
+                <NavLink to="/dashboard/task">
+                 
+                 Task List</NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/notification">
+                Notification
+                 </NavLink>
+              </li>
 
 
 
